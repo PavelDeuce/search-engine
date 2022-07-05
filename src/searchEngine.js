@@ -1,7 +1,29 @@
-const searchEngine = () => {
-  console.log('test');
+const buildSearchEngine = (items) => {
+  // eslint-disable-next-line no-unused-vars
+  if (items.length === 0) return { search: (searchStr) => [] };
+
+  return {
+    search: (searchStr) => {
+      const result = [];
+      const byWords = items.map((item) => {
+        const words = item.text.split(' ');
+        return {
+          id: item.id,
+          words,
+        };
+      });
+
+      byWords.forEach((item) => {
+        item.words.forEach((word) => {
+          if (word === searchStr && !result.includes(item.id)) {
+            result.push(item.id);
+          }
+        });
+      });
+
+      return result;
+    },
+  };
 };
 
-searchEngine();
-
-export default searchEngine;
+export default buildSearchEngine;
