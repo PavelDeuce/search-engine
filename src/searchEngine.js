@@ -1,25 +1,26 @@
 const findTermsWithCount = (searchingWord, items) => {
   const byWords = items.map((item) => {
     const words = item.text.split(' ');
-    return {
-      id: item.id,
-      words,
-    };
+    return { id: item.id, words };
   });
 
-  const documentsIds = byWords.flatMap((document) => {
-    return document.words.reduce((ids, word) => {
-      const token = new RegExp(word, 'gi');
-      const term = searchingWord.match(token);
-      return term !== null && term.length >= 0 ? [...ids, document.id] : ids;
-    }, []);
-  });
-
-  return documentsIds.reduce(
-    (termsCount, id) =>
-      termsCount[id] ? { ...termsCount, [id]: termsCount[id] + 1 } : { ...termsCount, [id]: 1 },
-    {},
-  );
+  return byWords
+    .map((document) => {
+      return document.words.reduce((terms, word) => {
+        const token = new RegExp(word, 'gi');
+        const term = searchingWord.match(token);
+        if (term === null) return terms;
+        return terms[document.id]
+          ? { ...terms, [document.id]: [...terms[document.id], ...term] }
+          : { ...terms, [document.id]: [...term] };
+      }, {});
+    })
+    .filter((index) => Object.keys(index).length !== 0)
+    .map((index) => {
+      const [entries] = Object.entries(index);
+      const [key, value] = entries;
+      return { [key]: value.length };
+    });
 };
 
 const buildSearchEngine = (items) => {
@@ -34,10 +35,12 @@ const buildSearchEngine = (items) => {
 
       const result = searchWords.reduce((acc, searchingWord) => {
         const termsWithCount = findTermsWithCount(searchingWord, items);
-
-        Object.entries(termsWithCount).forEach(([key, value]) => {
-          acc[key] = acc[key] ? acc[key] + value : value;
-        });
+        termsWithCount
+          .map((index) => Object.entries(index))
+          .forEach(([entries]) => {
+            const [key, value] = entries;
+            acc[key] = acc[key] ? acc[key] + value : value;
+          });
 
         return acc;
       }, {});
