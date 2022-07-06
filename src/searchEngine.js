@@ -15,7 +15,9 @@ const buildSearchEngine = (items) => {
 
       byWords.forEach((item) => {
         item.words.forEach((word) => {
-          if (word === searchStr && !result.includes(item.id)) {
+          const token = new RegExp(word, 'gi');
+          const term = searchStr.match(token);
+          if (term !== null && term.length >= 0 && !result.includes(item.id)) {
             result.push(item.id);
           }
         });
