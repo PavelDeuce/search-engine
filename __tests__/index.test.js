@@ -9,7 +9,7 @@ test('search-engine clear search with word processing', () => {
   const searchEngine = buildSearchEngine(docs);
   const searchEngine2 = buildSearchEngine([]);
 
-  expect(searchEngine.search('shoot')).toEqual(['doc2', 'doc1']);
+  expect(searchEngine.search('shoot at me')).toEqual(['doc2', 'doc1']);
   expect(searchEngine2.search('')).toEqual([]);
 
   expect(searchEngine.search('pint!')).toEqual(['doc1']);
