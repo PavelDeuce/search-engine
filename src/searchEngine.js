@@ -1,59 +1,35 @@
-const findTermsWithCount = (searchingWord, items) => {
-  const byWords = items.map((item) => {
-    const words = item.text.split(' ');
-    return { id: item.id, words };
+// @ts-check
+
+import buildReverseIndex from './buildReverseIndex.js';
+import getTfIdf from './metrics/tfIdf.js';
+import { getTerms, mergeCount } from './utils.js';
+
+export default (documents) => {
+  if (documents.length === 0) return { search: () => [] };
+
+  const configureMeta = (info, documentsInfo, allDocuments) => ({
+    ...info,
+    meta: {
+      tfIdf: getTfIdf(info, documentsInfo, allDocuments),
+    },
   });
 
-  return byWords
-    .map((document) => {
-      return document.words.reduce((terms, word) => {
-        const token = new RegExp(word, 'gi');
-        const term = searchingWord.match(token);
-        if (term === null) return terms;
-        return terms[document.id]
-          ? { ...terms, [document.id]: [...terms[document.id], ...term] }
-          : { ...terms, [document.id]: [...term] };
-      }, {});
-    })
-    .filter((index) => Object.keys(index).length !== 0)
-    .map((index) => {
-      const [entries] = Object.entries(index);
-      const [key, value] = entries;
-      return { [key]: value.length };
-    });
-};
+  const relevantSort = (documentInfo1, documentInfo2) =>
+    documentInfo2.meta.tfIdf - documentInfo1.meta.tfIdf;
 
-const buildSearchEngine = (items) => {
-  // eslint-disable-next-line no-unused-vars
-  if (items.length === 0) return { search: (searchStr) => [] };
+  const search = (word) => {
+    const queryTerms = getTerms(word);
+    const dictionary = buildReverseIndex(documents);
+    const documentsInfo = queryTerms
+      .flatMap((term) => dictionary[term])
+      .filter(Boolean)
+      .reduce(mergeCount, []);
 
-  return {
-    search: (searchStr) => {
-      if (!searchStr.trim()) return [];
-
-      const searchWords = searchStr.split(' ');
-
-      const result = searchWords.reduce((acc, searchingWord) => {
-        const termsWithCount = findTermsWithCount(searchingWord, items);
-        termsWithCount
-          .map((index) => Object.entries(index))
-          .forEach(([entries]) => {
-            const [key, value] = entries;
-            acc[key] = acc[key] ? acc[key] + value : value;
-          });
-
-        return acc;
-      }, {});
-
-      return Object.entries(result)
-        .map(([key, value]) => ({
-          id: key,
-          count: value,
-        }))
-        .sort((a, b) => (a.count <= b.count ? 1 : -1))
-        .map((i) => i.id);
-    },
+    return documentsInfo
+      .map((info) => configureMeta(info, documentsInfo, documents))
+      .sort(relevantSort)
+      .map(({ id }) => id);
   };
-};
 
-export default buildSearchEngine;
+  return { search };
+};
