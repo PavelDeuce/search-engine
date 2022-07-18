@@ -14,8 +14,7 @@ export default (documents) => {
     },
   });
 
-  const relevantSort = (documentInfo1, documentInfo2) =>
-    documentInfo2.meta.tfIdf - documentInfo1.meta.tfIdf;
+  const relevantSort = (info1, info2) => info2.meta.tfIdf - info1.meta.tfIdf;
 
   const search = (word) => {
     const queryTerms = getTerms(word);
