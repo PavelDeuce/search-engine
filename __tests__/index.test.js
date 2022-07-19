@@ -2,13 +2,13 @@
 
 import buildSearchEngine from '../src/searchEngine.js';
 
-describe('search-engine', () => {
-  it('empty documents', () => {
+describe('Search-engine', () => {
+  it('Empty documents', () => {
     const searchEngine = buildSearchEngine([]);
     expect(searchEngine.search('yo')).toEqual([]);
   });
 
-  it('clear search with word processing and metrics', () => {
+  it('Clear search with word processing and metrics', () => {
     const doc1 = { id: 'doc1', text: "I can't shoot straight unless I've had a pint!" };
     const doc2 = { id: 'doc2', text: "Don't shoot shoot shoot that thing at me." };
     const doc3 = { id: 'doc3', text: "I'm your shooter." };
@@ -21,6 +21,6 @@ describe('search-engine', () => {
     expect(searchEngine.search('pint')).toEqual(['doc1']);
 
     expect(searchEngine.search('')).toEqual([]);
-    expect(searchEngine.search('yo 1')).toEqual([]);
+    expect(searchEngine.search('For the king!')).toEqual([]);
   });
 });
