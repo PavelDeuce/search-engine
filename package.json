@@ -1,6 +1,6 @@
 {
   "name": "@hexlet/code",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Search engine",
   "main": "src/searchEngine.js",
   "type": "module",
