@@ -8,7 +8,8 @@ import { getTerms, mergeCount } from './utils.js';
  * Build search-engine core
  *
  * @param {({id: string, text: string})[]} documents Document's list
- * @returns {{search: (function(): *[])} | {search: (function(string): string[])}} Engine object with search function which returns documents includes searched value
+ * @returns {{search: (function(): *[])} | {search: (function(string): string[])}}
+ * Engine object with search function which returns documents includes searched value
  */
 export default (documents) => {
   if (documents.length === 0) return { search: () => [] };
