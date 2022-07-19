@@ -18,5 +18,5 @@ const doc3 = { id: 'doc3', text: "I'm your shooter." };
 
 const docs = [doc1, doc2, doc3];
 const searchEngine = buildSearchEngine(docs);
-searchEngine.search('shoot at me') // ['doc2', 'doc1']
+console.log(searchEngine.search('shoot at me')); // ['doc2', 'doc1']
 ```
