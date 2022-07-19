@@ -1,6 +1,6 @@
 // @ts-check
 
-import buildSearchEngine from '../src/searchEngine';
+import buildSearchEngine from '../src/searchEngine.js';
 
 describe('search-engine', () => {
   it('empty documents', () => {

@@ -2,6 +2,12 @@
 
 import { getTerms } from './utils.js';
 
+/**
+ * Build documents reverse index
+ *
+ * @param {{id: string, text: string}[]} documents Document's list
+ * @returns {{term: string[], id: string} | {}} Reverse index dictionary
+ */
 export default (documents) => {
   const buildTermValue = (id, previous = []) => {
     const previousIdValue = previous.find((item) => item.id === id);
