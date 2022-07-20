@@ -1,4 +1,4 @@
-### search-engine
+# search-engine
 
 [![Actions Status](https://github.com/PavelDeuce/js-algorithms-project-lvl1/workflows/hexlet-check/badge.svg)](https://github.com/PavelDeuce/js-algorithms-project-lvl1/actions)
 [![Node CI](https://github.com/PavelDeuce/search-engine/actions/workflows/nodejs.yml/badge.svg)](https://github.com/PavelDeuce/search-engine/actions/workflows/nodejs.yml)
